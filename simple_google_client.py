@@ -25,6 +25,13 @@ class GoogleClient:
         response = request.execute()
         return response
 
+    def add_sheet(self, spreadsheet_id: str, request: dict[str, list[dict[str, dict[str, dict[str, str]]]]]) -> dict:
+        request = self._service.spreadsheets().batchUpdate(spreadsheetId=spreadsheet_id,
+                                                           body=request)
+
+        response = request.execute()
+        return response
+
     # https://googleapis.github.io/google-api-python-client/docs/dyn/sheets_v4.spreadsheets.values.html#append
     def append_values(self, spreadsheet_id: str, range: str,
                       data: dict[str, list[list[str | int | float | bool | None]] | str],
@@ -46,16 +53,32 @@ if __name__ == "__main__":
     test_table_id = "1acz1eBGEBwd_qPvJLLQGzj_wcRek8jrR66ceWUIw0n0"
     # pprint(google_service.get_values(test_table_id, "Sheet1!A1:C4"))
 
-    data_to_append = {
-        "majorDimension": "ROWS",
-        "values": [
-            [
-                "codilac", "1999", "black"
-            ],
-        ],
-    }
+    # data_to_append = {
+    #     "majorDimension": "ROWS",
+    #     "values": [
+    #         [
+    #             "codilac", "1999", "black"
+    #         ],
+    #     ],
+    # }
+    #
+    # pprint(google_service.append_values(test_table_id,
+    #                                     range="Sheet1!A1:C10",
+    #                                     data=data_to_append,
+    #                                     value_input_option="USER_ENTERED"))
 
-    pprint(google_service.append_values(test_table_id,
-                                        range="Sheet1!A1:C10",
-                                        data=data_to_append,
-                                        value_input_option="USER_ENTERED"))
+    # https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets/sheets?hl=ru
+    # request = {
+    #     "requests": [
+    #         {
+    #             "addSheet": {
+    #                 "properties": {
+    #                     "sheetId": "777",
+    #                     "title": "azino"
+    #                 }
+    #             }
+    #         }
+    #     ]
+    # }
+
+    # pprint(google_service.add_sheet(test_table_id, request=request))
